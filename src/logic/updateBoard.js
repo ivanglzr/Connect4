@@ -1,20 +1,32 @@
-export const updateBoard = ({ index, board, turn }) => {
-  /*
-  [1][2][3][4][5][6][7]
-  [8][9][10][11][][][14]
-  [15][][][][][][]
-  [22][][][][][][]
-  [29][][][][][][]
-  [36][][][][][][]
-  */
+import { checkWinner } from "./checkWinner";
 
-  if (board[index + 7 * 5] == " ") board[index + 7 * 5] = turn;
-  else if (board[index + 7 * 4] == " ") board[index + 7 * 4] = turn;
-  else if (board[index + 7 * 3] == " ") board[index + 7 * 3] = turn;
-  else if (board[index + 7 * 2] == " ") board[index + 7 * 2] = turn;
-  else if (board[index + 7] == " ") board[index + 7] = turn;
-  else if (board[index] == " ") board[index] = turn;
-  else return null;
+import { TURNS } from "../constants";
 
-  return board;
+export const updateBoard = ({ board, i, turn }) => {
+  let newBoard = [...board];
+  let index = i;
+  let winner = false;
+
+  if (newBoard[i + 7 * 5] === " ") {
+    newBoard[i + 7 * 5] = turn;
+    index = i + 7 * 5;
+  } else if (newBoard[i + 7 * 4] === " ") {
+    newBoard[i + 7 * 4] = turn;
+    index = i + 7 * 4;
+  } else if (newBoard[i + 7 * 3] === " ") {
+    newBoard[i + 7 * 3] = turn;
+    index = i + 7 * 3;
+  } else if (newBoard[i + 7 * 2] === " ") {
+    newBoard[i + 7 * 2] = turn;
+    index = i + 7 * 2;
+  } else if (newBoard[i + 7] === " ") {
+    newBoard[i + 7] = turn;
+    index = i + 7;
+  } else if (newBoard[i] === " ") newBoard[i] = turn;
+
+  if (checkWinner({ board: newBoard, i: index })) winner = true;
+
+  const newTurn = turn == TURNS.blue ? TURNS.red : TURNS.blue;
+
+  return { newBoard, newTurn, winner };
 };
